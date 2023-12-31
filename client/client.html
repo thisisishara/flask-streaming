@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming API client</title>
+</head>
+<body>
+    <div id="container"></div>
+
+    <script>
+        async function streamLyric() {
+            const response = await fetch('http://localhost:5000/stream');
+            const reader = response.body.getReader();
+
+            while (true) {
+                const { done, value } = await reader.read();
+
+                if (done) {
+                    break;
+                }
+
+                const text = new TextDecoder().decode(value);
+
+                document.getElementById('container').innerHTML += text;
+            }
+        }
+
+        streamLyric();
+    </script>
+</body>
+</html>
